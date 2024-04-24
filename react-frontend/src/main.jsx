@@ -1,9 +1,8 @@
 // src/main.jsx
-import React, { useState } from "react";
+import React from "react";
 import ReactDOMClient from "react-dom/client";
 import MyApp from "./MyApp";
 import "./main.css";
-import Table from "./Table";
 
 console.log("Hi")
 

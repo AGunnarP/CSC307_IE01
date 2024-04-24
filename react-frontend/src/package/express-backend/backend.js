@@ -84,8 +84,11 @@ const users = {
 
   app.delete("/users", (req, res) => {
 
-    const userToDelete = req.body;
-    for(user in users.users_list)
-        if(user.id === userToDelete.id)
-            users.users_list.pop(user.id);
+    console.log("Deleting");
+    const id = req.query.id;
+    console.log(userToDelete);
+    delete users.users_list[id];
+
+    res.send();
+
   })

@@ -42,10 +42,12 @@ useEffect(() => {
 	  .catch((error) => { console.log(error); });
 }, [] );
 
-  function removeOneCharacter(index) {
+  async function removeOneCharacter(index) {
     const updated = characters.filter((character, i) => {
       return i !== index;
     });
+    console.log("Pressed button");
+    await deleteUser(characters[index]);
     setCharacters(updated);
   }
 
@@ -73,14 +75,16 @@ function updateList(person) {
 
 function deleteUser(person){
 
-  const promise = fetch("Http://localhost:8000/users",{
+  const promise = fetch("Http://localhost:8000/users?id="+person.id,{
 
-    method: "POST",
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(person),
   });
+
+  return promise;
 
 }
 

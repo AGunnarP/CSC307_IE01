@@ -78,17 +78,16 @@ const users = {
     const userToAdd = req.body;
     userToAdd.id = Math.random() * Math.random() * 123;
     addUser(userToAdd);
-    res.status = 201;
-    res.send(userToAdd);
+    res.status(201).send(userToAdd);
   });
 
-  app.delete("/users", (req, res) => {
-
-    console.log("Deleting");
-    const id = req.query.id;
-    console.log(userToDelete);
-    delete users.users_list[id];
-
-    res.send();
-
-  })
+  app.delete("/users/:id", (req, res) => {
+    const id = req.params.id;
+    const index = users.users_list.findIndex(user => user.id === id);
+    if (index !== -1) {
+      users.users_list.splice(index, 1);
+      res.send(`User with ID ${id} deleted successfully.`);
+    } else {
+      res.status(404).send(`User with ID ${id} not found.`);
+    }
+  });

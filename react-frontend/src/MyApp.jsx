@@ -4,52 +4,42 @@ import Table from "./Table";
 
 function MyApp() {
   const [characters, setCharacters] = useState([
-    {
-      name: "Charlie",
-      job: "Janitor"
-    },
-    {
-      name: "Mac",
-      job: "Bouncer"
-    },
-    {
-      name: "Dee",
-      job: "Aspring actress"
-    },
-    {
-      name: "Dennis",
-      job: "Bartender"
-    }
 
     
   ]);
 
-  function fetchUsers() {
-    const promise = fetch("http://localhost:8000/users");
-    return promise;
+  async function fetchUsers() {
+    try {
+      const response = await fetch("http://localhost:8000/users");
+      const data = await response.json();
+      setCharacters(data["users_list"]);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   }
-
-  // src/MyApp.js (a new inner function inside MyApp())
-
-  //const characters = fetchUsers();
-
-// src/MyApp.js (a new block inside MyApp())
 
 useEffect(() => {
-  fetchUsers()
-	  .then((res) => res.json())
-	  .then((json) => setCharacters(json["users_list"]))
-	  .catch((error) => { console.log(error); });
-}, [] );
+  fetchUsers();
+}, []);
 
-  async function removeOneCharacter(index) {
-    await deleteUser(characters[index]);
-    const updated = characters.filter((character, i) => {
-      return i !== index;
-    });
-    console.log("Pressed button");
-    setCharacters(updated);
+async function removeOneCharacter(index) {
+  try {
+    const userId = characters[index].id; // Assuming each user has an id
+    await deleteUser(userId);
+    setCharacters(prevCharacters => prevCharacters.filter((_, i) => i !== index));
+  } catch (error) {
+    console.error("Error removing user:", error);
   }
+}
+
+async function addCharacter(user) {
+  try {
+    const newUser = await postUser(user);
+    setCharacters(prevCharacters => [...prevCharacters, newUser]);
+  } catch (error) {
+    console.error("Error adding user:", error);
+  }
+}
 
   // src/MyApp.js (a new inner function inside MyApp())
 
